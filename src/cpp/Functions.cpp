@@ -2,51 +2,51 @@
 #include <cmath>
 #include "sl.h"
 
-Ball ball;
+ Ball ball;
 Vector2 getMousePosition()
 {
-	int x = slGetMouseX();
-	int y = slGetMouseY();
+	float x = slGetMouseX();
+	float y = slGetMouseY();
 
 	return { x,y };
 }
 
 void drawBall(Ball ball,Color color)
 {
-
+	
 	slSetForeColor(color.r, color.g, color.b, color.a);
-	slCircleFill(ball.x, ball.y, ball.radius, 100);
+	slCircleFill(ball.position.x, ball.position.y, ball.radius, 100);
 }
 void drawRectangle(Rectangle rectangle, Color color)
 {
 	slSetForeColor(color.r, color.g, color.b, color.a);
 	slRectangleFill(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 }
-bool checkRecBallCollision(Rectangle rectangle)
+bool checkRecBallCollision(Rectangle rectangle, Ball ball)
 {
+	updatePadParts(rectangle); 
+	float testX = ball.position.x;
+	float testY = ball.position.y;
 
-	float testX = ball.x;
-	float testY = ball.y;
-
-	if (ball.x < rectangle.x)
+	if (ball.position.x < rectangle.leftEdge)
 	{
-		testX = rectangle.x;
+		testX = rectangle.leftEdge;
 	}
-	else if (ball.x > rectangle.x + rectangle.width)
+	else if (ball.position.x > rectangle.rightEdge)
 	{
-		testX = rectangle.x + rectangle.width;
+		testX = rectangle.rightEdge;
 	}
-	if (ball.y < rectangle.y)
+	if (ball.position.y < rectangle.upEdge)
 	{
-		testY = rectangle.y;
+		testY = rectangle.upEdge;
 	}
-	else if (ball.y > rectangle.y + rectangle.height)
+	else if (ball.position.y > rectangle.downEdge)
 	{
-		testY = rectangle.y + rectangle.height;
+		testY = rectangle.downEdge;
 	}
 
-	float distanceX = ball.x - testX;
-	float distanceY = ball.y - testY;
+	float distanceX = ball.position.x - testX;
+	float distanceY = ball.position.y - testY;
 	float distance = sqrt((distanceX * distanceX) + (distanceY * distanceY));
 
 	if (distance <= ball.radius)

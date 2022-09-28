@@ -2,8 +2,8 @@
 
 struct Vector2
 {
-	int x;
-	int y;
+	float x;
+	float y;
 };
 struct Rectangle
 {
@@ -11,13 +11,27 @@ struct Rectangle
 	int y;
 	int width;
 	int height;
+	int rightEdge;
+	int leftEdge;
+	int upEdge;
+	int downEdge;
+};
+void updatePadParts(Rectangle& rec);
+struct Player
+{
+	Rectangle pad;
+	int score;
+	int lives;
 };
 struct Ball
 {
-	int x;
-	int y;
+	Vector2 position;
 	int radius;
+	Vector2 speed;
 };
+
+
+
 struct Color
 {
 	double r;

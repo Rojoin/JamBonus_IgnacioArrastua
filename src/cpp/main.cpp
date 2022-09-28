@@ -1,85 +1,46 @@
 
+#include <iostream>
+
 #include "../header/Functions.h"
+#include "../header/GameLogic.h"
+#include "../header/InputSystem.h"
 
 int main(int args, char* argv[])
 {
 	// set up our window and a few resources we need
-	slWindow(400, 400, "I´m in Misery", false);
+	slWindow(900, 900, "I´m in Misery", false);
 	//slSetFont(slLoadFont("../Assets/secret.TTF"), 24);
 	//slSetTextAlign(SL_ALIGN_CENTER);
 	int tex = slLoadTexture("../Assets/secret4.png");
-	int y = 0;
-	int x = 0;
-	int z = 40;
-	float timeUntil = 5.0f;
-	bool changeScreen = false;
-	Rectangle example = { 200,200,50,50 };
-	Ball ball= {100, 200, 50};
+	extern Ball ball;
+	Vector2 pos = {100,200};
+	Vector2 speed = {200,250};
+	ball.radius = 50;
+	ball.position = pos;
+	ball.speed = speed;
+	Player player = { 450,100,25,25 };
 	while (!slShouldClose() && !slGetKey(SL_KEY_ESCAPE))
 	{
 
-		if (slGetKey('W'))
+		updatePadParts(player.pad);
+		int speed = 10;
+		double test = slGetDeltaTime();
+		if (slGetKey('A') && player.pad.leftEdge > 0)
 		{
-			y += 2;
-		}
-		if (slGetKey('S'))
-		{
-			y -= 2;
-		}
-		if (slGetKey('A'))
-		{
-			x -= 2;
-		}
-		if (slGetKey('D'))
-		{
-			x += 2;
-		}
-		if (slGetKey('Q'))
-		{
-			z -= 2;
-		}
-		if (slGetKey('E'))
-		{
-			z += 2;
-		}
-		// background glow
 
-		slSprite(tex, x, y, z, z);
-		slSetForeColor(1, 1, 1, 1);
-		//slRectangleFill(x, y, z, z);
-		if (timeUntil >= 0 && !changeScreen)
-		{
-			timeUntil -= slGetDeltaTime();
-
+			player.pad.x -= speed *0.16f;
 		}
-		if (changeScreen && timeUntil < 0)
+		if (slGetKey('Q') && player.pad.rightEdge < 900)
 		{
-			slClose();
-			slWindow(800, 800, "Rompemotodo", false);
-			changeScreen = false;
-		}
-		if (timeUntil < 0 && changeScreen)
-		{
-			changeScreen = true;
+			player.pad.x += speed * 0.16f;
 		}
 
-		slSetBackColor(1, 1, 1);
-
-		slSprite(tex, x, y, z, z);
-		//slSetFontSize(24);
-		//slText(200, 250, "Nacho:");
-		slSetForeColor(0, 0, 1, 1);
-
-		if (checkRecMouseCollision(example, getMousePosition()))
-		{
-			drawRectangle(example, BLUE);
-		}
-		else
-		{
-			drawRectangle(example, RED);
-		}
-		drawBall(ball,BLACK);
-
+		std::cout << player.pad.x;
+	
+		/*ballLogic();
+		wallCollision();
+		drawBall(ball,RED);*/
+		drawRectangle(player.pad, WHITE);
 
 		slRender();
 
